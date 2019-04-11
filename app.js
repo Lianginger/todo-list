@@ -60,11 +60,20 @@ app.get('/todos/:id', (req, res) => {
 })
 
 app.get('/todos/:id/edit', (req, res) => {
-  res.send('修改這個 todo 頁面')
+  Todo.findById(req.params.id, (err, todo) => {
+    if (err) return console.error(err)
+    return res.render('edit', { todo: todo })
+  })
 })
 
 app.post('/todos/:id', (req, res) => {
-  res.send('修改這個 todo')
+  Todo.findById(req.params.id, (err, todo) => {
+    if (err) return console.error(err)
+    todo.name = req.body.name
+    todo.save((err) => {
+      return res.redirect('/todos/' + todo.id)
+    })
+  })
 })
 
 app.post('/todos/:id/delete', (req, res) => {
