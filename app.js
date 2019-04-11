@@ -2,9 +2,11 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose') // 載入 mongoose
 const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // 設定連線到 mongoDB
 mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
@@ -25,7 +27,7 @@ db.once('open', () => {
 const Todo = require('./models/todo')
 
 app.get('/', (req, res) => {
-  Todo.find((err, todos) => {
+  Todo.find((err, todos) => { // 把 Todo model 所有的資料都抓回來
     return res.render('index', { todos: todos })
   })
 })
@@ -35,11 +37,18 @@ app.get('/todos', (req, res) => {
 })
 
 app.get('/todos/new', (req, res) => {
-  res.send('新增 todo 頁面')
+  res.render('new')
 })
 
 app.post('/todos', (req, res) => {
-  res.send('建立 todo')
+  const todo = Todo({
+    name: req.body.name
+  })
+
+  todo.save((err) => {
+    if (err) return console.log(err)
+    return res.redirect('/')
+  })
 })
 
 app.get('/todos/:id', (req, res) => {
