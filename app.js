@@ -52,7 +52,11 @@ app.post('/todos', (req, res) => {
 })
 
 app.get('/todos/:id', (req, res) => {
-  res.send('顯示這個 todo')
+  // req.params.id
+  Todo.findById(req.params.id, (err, todo) => {
+    if (err) return console.error(err)
+    return res.render('detail', { todo: todo })
+  })
 })
 
 app.get('/todos/:id/edit', (req, res) => {
