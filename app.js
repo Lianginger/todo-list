@@ -14,7 +14,7 @@ db.on('error', () => {
 
 // 連線成功
 db.once('open', () => {
-  console.log('mongo connect')
+  console.log('mongodb connected')
 })
 
 // 載入 todo model
