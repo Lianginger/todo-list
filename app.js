@@ -24,6 +24,34 @@ app.get('/', (req, res) => {
   res.send('hello world!')
 })
 
+app.get('/todos', (req, res) => {
+  res.send('列出所有 todo')
+})
+
+app.get('/todos/new', (req, res) => {
+  res.send('新增 todo 頁面')
+})
+
+app.post('/todos', (req, res) => {
+  res.send('建立 todo')
+})
+
+app.get('/todos/:id', (req, res) => {
+  res.send('顯示這個 todo')
+})
+
+app.get('/todos/:id/edit', (req, res) => {
+  res.send('修改這個 todo 頁面')
+})
+
+app.post('/todos/:id', (req, res) => {
+  res.send('修改這個 todo')
+})
+
+app.post('/todos/:id/delete', (req, res) => {
+  res.send('刪除這個 todo')
+})
+
 app.listen(3000, () => {
   console.log('App is running!')
 })
