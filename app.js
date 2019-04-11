@@ -25,7 +25,9 @@ db.once('open', () => {
 const Todo = require('./models/todo')
 
 app.get('/', (req, res) => {
-  res.render('index')
+  Todo.find((err, todos) => {
+    return res.render('index', { todos: todos })
+  })
 })
 
 app.get('/todos', (req, res) => {
