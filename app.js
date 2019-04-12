@@ -77,7 +77,11 @@ app.post('/todos/:id', (req, res) => {
 })
 
 app.post('/todos/:id/delete', (req, res) => {
-  res.send('刪除這個 todo')
+  Todo.findById(req.params.id, (err, todo) => {
+    todo.remove((err) => {
+      res.redirect('/')
+    })
+  })
 })
 
 app.listen(3000, () => {
