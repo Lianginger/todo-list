@@ -4,10 +4,12 @@ const mongoose = require('mongoose') // 載入 mongoose
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const port = 3000
+const methodOverride = require('method-override')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 
 // 設定連線到 mongoDB
 mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
@@ -69,7 +71,7 @@ app.get('/todos/:id/edit', (req, res) => {
   })
 })
 
-app.post('/todos/:id', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   Todo.findById(req.params.id, (err, todo) => {
     if (err) return console.error(err)
     todo.name = req.body.name
@@ -84,7 +86,7 @@ app.post('/todos/:id', (req, res) => {
   })
 })
 
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id/delete', (req, res) => {
   Todo.findById(req.params.id, (err, todo) => {
     todo.remove((err) => {
       res.redirect('/')
