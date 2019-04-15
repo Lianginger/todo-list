@@ -3,6 +3,7 @@ const app = express()
 const mongoose = require('mongoose') // 載入 mongoose
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const port = 3000
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -70,6 +71,11 @@ app.post('/todos/:id', (req, res) => {
   Todo.findById(req.params.id, (err, todo) => {
     if (err) return console.error(err)
     todo.name = req.body.name
+    if (req.body.done === 'on') {
+      todo.done = true
+    } else {
+      todo.done = false
+    }
     todo.save((err) => {
       return res.redirect('/todos/' + todo.id)
     })
@@ -84,6 +90,6 @@ app.post('/todos/:id/delete', (req, res) => {
   })
 })
 
-app.listen(3000, () => {
-  console.log('App is running!')
+app.listen(port, () => {
+  console.log(`Express server is running on http://localhost:${port}`)
 })
