@@ -29,70 +29,8 @@ db.once('open', () => {
 // 載入 todo model
 const Todo = require('./models/todo')
 
-app.get('/', (req, res) => {
-  Todo.find()
-    .sort({ name: 'asc' })
-    .exec((err, todos) => { // 把 Todo model 所有的資料都抓回來
-      return res.render('index', { todos: todos })
-    })
-})
-
-app.get('/todos', (req, res) => {
-  res.send('列出所有 todo')
-})
-
-app.get('/todos/new', (req, res) => {
-  res.render('new')
-})
-
-app.post('/todos', (req, res) => {
-  const todo = Todo({
-    name: req.body.name
-  })
-
-  todo.save((err) => {
-    if (err) return console.log(err)
-    return res.redirect('/')
-  })
-})
-
-app.get('/todos/:id', (req, res) => {
-  // req.params.id
-  Todo.findById(req.params.id, (err, todo) => {
-    if (err) return console.error(err)
-    return res.render('detail', { todo: todo })
-  })
-})
-
-app.get('/todos/:id/edit', (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
-    if (err) return console.error(err)
-    return res.render('edit', { todo: todo })
-  })
-})
-
-app.put('/todos/:id', (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
-    if (err) return console.error(err)
-    todo.name = req.body.name
-    if (req.body.done === 'on') {
-      todo.done = true
-    } else {
-      todo.done = false
-    }
-    todo.save((err) => {
-      return res.redirect('/todos/' + todo.id)
-    })
-  })
-})
-
-app.delete('/todos/:id/delete', (req, res) => {
-  Todo.findById(req.params.id, (err, todo) => {
-    todo.remove((err) => {
-      res.redirect('/')
-    })
-  })
-})
+app.use('/', require('./routes/home'))
+app.use('/todos', require('./routes/todos'))
 
 app.listen(port, () => {
   console.log(`Express server is running on http://localhost:${port}`)

@@ -1,5 +1,5 @@
 <form action="/todos/{{{todo.id}}}?_method=PUT" method="post">
-  <input type="checkbox" name="done" {{#if this.done}}checked{{/if}}>
+  <input type="checkbox" name="done" {{#if todo.done}}checked{{/if}}>
   <input name="name" value="{{{todo.name}}}" placeholder="name">
   <button type="submit">Edit</button>
 </form>
