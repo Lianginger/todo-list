@@ -1,5 +1,14 @@
-<form action="/todos/{{{todo.id}}}?_method=PUT" method="post">
-  <input type="checkbox" name="done" {{#if todo.done}}checked{{/if}}>
-  <input name="name" value="{{{todo.name}}}" placeholder="name">
-  <button type="submit">Edit</button>
+<form action="/todos/{{{todo.id}}}?_method=PUT" method="POST" style="display: inline">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <div class="input-group-text">
+        <input type="checkbox" name="done" {{#if todo.done}}checked{{/if}}>
+      </div>
+
+    </div>
+    <input type="text" placeholder="name" name="name" value="{{{todo.name}}}" class="form-control">
+    <div class="input-group-append">
+      <button type="submit" class="btn btn-success">Done</button>
+    </div>
+  </div>
 </form>
