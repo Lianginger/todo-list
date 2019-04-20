@@ -11,6 +11,7 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
+mongoose.set('debug', true);
 // 設定連線到 mongoDB
 mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
 // mogoose 連線後，透過 mongoose.connection 拿到 Connection 的物件
@@ -25,9 +26,6 @@ db.on('error', () => {
 db.once('open', () => {
   console.log('mongodb connected')
 })
-
-// 載入 todo model
-const Todo = require('./models/todo')
 
 app.use('/', require('./routes/home'))
 app.use('/users', require('./routes/user'))
