@@ -30,6 +30,7 @@ db.once('open', () => {
 const Todo = require('./models/todo')
 
 app.use('/', require('./routes/home'))
+app.use('/users', require('./routes/user'))
 app.use('/todos', require('./routes/todos'))
 
 app.listen(port, () => {
