@@ -41,9 +41,9 @@ router.post('/register', (req, res) => {
 })
 
 // 登出
-router.post('/logout', (req, res) => {
-
-  res.render('logout')
+router.get('/logout', (req, res) => {
+  req.logout()
+  res.redirect('/users/login')
 })
 
 module.exports = router
