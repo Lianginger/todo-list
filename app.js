@@ -15,6 +15,8 @@ app.use(methodOverride('_method'))
 // 使用 express session 
 app.use(session({
   secret: 'ginger secret key', // secret: 定義一組自己的私鑰（字串)
+  resave: 'false',
+  saveUninitialized: 'false'
 }))
 // 使用 Passport 
 app.use(passport.initialize())
@@ -31,7 +33,7 @@ app.use((req, res, next) => {
 
 mongoose.set('debug', true);
 // 設定連線到 mongoDB
-mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true, useCreateIndex: true })
 // mogoose 連線後，透過 mongoose.connection 拿到 Connection 的物件
 const db = mongoose.connection
 
