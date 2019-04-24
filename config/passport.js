@@ -53,7 +53,7 @@ module.exports = (() => {
                 const newUser = User({
                   name: profile._json.name,
                   email: profile._json.email,
-                  passport: hash
+                  password: hash
                 })
                 newUser.save().then(user => {
                   return done(null, user)
