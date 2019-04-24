@@ -50,6 +50,7 @@ db.once('open', () => {
 app.use('/', require('./routes/home'))
 app.use('/users', require('./routes/user'))
 app.use('/todos', require('./routes/todos'))
+app.use('/auth', require('./routes/auths'))
 
 app.listen(port, () => {
   console.log(`Express server is running on http://localhost:${port}`)

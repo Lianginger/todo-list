@@ -1,5 +1,6 @@
 const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy;
+const LocalStrategy = require('passport-local').Strategy
+const FacebookStrategy = require('passport-facebook').Strategy
 const mongoose = require('mongoose')
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
@@ -30,6 +31,41 @@ module.exports = (() => {
         })
     }
   ));
+  passport.use(new FacebookStrategy({
+    clientID: '426450784852611',
+    clientSecret: '0cfbabe43fd29e6d2f256dd75ae5ff32',
+    callbackURL: "http://localhost:3000/auth/facebook/callback",
+    profileFields: ['displayName', 'photos', 'email']
+  },
+    function (accessToken, refreshToken, profile, done) {
+      User.findOne({ email: profile._json.email })
+        .then(user => {
+          // 如果 email 不存在就建立新的使用者
+          console.log(profile)
+          console.log(profile._json)
+          console.log(profile._raw)
+          if (!user) {
+            // 因為密碼是必填欄位，所以我們可以幫使用者隨機產生一組密碼，然後用 bcrypt 處理，再儲存起來
+            const randomPassword = Math.random().toString(36).slice(-8)
+            bcrypt.genSalt(10, function (err, salt) {
+              bcrypt.hash(randomPassword, salt, function (err, hash) {
+                // Store hash in your password DB.
+                const newUser = User({
+                  name: profile._json.name,
+                  email: profile._json.email,
+                  passport: hash
+                })
+                newUser.save().then(user => {
+                  return done(null, user)
+                }).catch(err => { console.log(err) })
+              })
+            })
+          } else {
+            return done(null, user)
+          }
+        })
+    }
+  ))
   // 為了要支援 session 功能，Passport 提供 serialize 與 deserialize 
   passport.serializeUser(function (user, done) {
     done(null, user.id);
